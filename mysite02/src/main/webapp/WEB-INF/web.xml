@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
   <display-name>mysite02</display-name>
+  
   <servlet>
     <description></description>
     <servlet-name>MainController</servlet-name>
@@ -14,6 +15,7 @@
     <servlet-name>MainController</servlet-name>
     <url-pattern>/main</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>UserController</display-name>
@@ -24,6 +26,7 @@
     <servlet-name>UserController</servlet-name>
     <url-pattern>/user</url-pattern>
   </servlet-mapping>
+  
   <servlet>
     <description></description>
     <display-name>GuestbookController</display-name>
@@ -33,5 +36,14 @@
   <servlet-mapping>
     <servlet-name>GuestbookController</servlet-name>
     <url-pattern>/guestbook</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>BoardController</servlet-name>
+    <servlet-class>com.douzone.mysite.controller.BoardController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BoardController</servlet-name>
+    <url-pattern>/board</url-pattern>
   </servlet-mapping>
 </web-app>
