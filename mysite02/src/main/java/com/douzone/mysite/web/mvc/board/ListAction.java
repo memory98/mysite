@@ -29,7 +29,6 @@ public class ListAction implements Action {
 			list = new BoardDao().findTitle(search);
 		}
 		cnt = list.size();
-
 		int integerPage = Integer.parseInt(page);
 		int start = (integerPage -1)*5;
 		int end = (5 * integerPage)>cnt-1?cnt:(5 * integerPage);
