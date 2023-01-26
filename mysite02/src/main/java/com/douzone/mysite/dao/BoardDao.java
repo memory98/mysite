@@ -344,7 +344,6 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		PreparedStatement pstmt2 = null;
 		ResultSet rs = null;
-//		int cnt= 5;
 		try {
 			conn = getConnection();
 

@@ -22,10 +22,8 @@ public class UpdateBoardAction implements Action {
 		vo.setNo(no);
 		vo.setTitle(title);
 		vo.setContents(content);
-		System.out.println(vo);
 		new BoardDao().update(vo);
 		
-//		MvcUtil.forward("board/", request, response);
 		MvcUtil.redirect(request.getContextPath()+"/board?a=view&no="+no, request, response);
 	}
 }

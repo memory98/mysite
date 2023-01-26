@@ -19,7 +19,6 @@ public class WriteAction implements Action {
 		String content = request.getParameter("content");
 		Long userNo = Long.parseLong(request.getParameter("user_no"));
 		Long no = Long.parseLong(request.getParameter("no"));
-		System.out.println(no);
 		BoardVo vo = new BoardVo();
 		if(no==-1) {
 			vo.setoNo(1);
