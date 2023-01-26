@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.douzone.mysite.web.mvc.board.BoardActionFactory;
 import com.douzone.mysite.web.mvc.guestbook.GuestbookActionFactory;
 import com.douzone.web2.mvc.Action;
 import com.douzone.web2.mvc.ActionFactory;
@@ -17,7 +18,7 @@ public class BoardController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String actioName = request.getParameter("a");
-		ActionFactory af = new GuestbookActionFactory();
+		ActionFactory af = new BoardActionFactory();
 		Action action = af.getAction(actioName);
 		action.execute(request, response);
 	}

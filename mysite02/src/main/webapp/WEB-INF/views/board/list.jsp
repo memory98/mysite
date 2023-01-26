@@ -1,18 +1,25 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%
+	pageContext.setAttribute("newline","\n");
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%=request.getContextPath()%>/assets/css/board.css" rel="stylesheet" type="text/css">
+<link href="${pageContext.request.contextPath}/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
 		<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="" method="post">
+				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
+					<input type="hidden" name="a" value="search">
 					<input type="text" id="kwd" name="kwd" value="">
 					<input type="submit" value="찾기">
 				</form>
@@ -24,35 +31,83 @@
 						<th>조회수</th>
 						<th>작성일</th>
 						<th>&nbsp;</th>
-					</tr>				
-					<tr>
-						<td>3</td>
-						<td><a href="">세 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-11 12:04:20</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>2</td>
-						<td><a href="">두 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-10-02 12:04:12</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td><a href="">첫 번째 글입니다.</a></td>
-						<td>안대혁</td>
-						<td>3</td>
-						<td>2015-09-25 07:24:32</td>
-						<td><a href="" class="del">삭제</a></td>
-					</tr>
+					</tr>		
+					<!--<c:set var="count" value="${fn:length(list)}"></c:set> -->
+					<c:forEach items="${list}" var="vo" varStatus="status">
+						<tr>
+							<td>${boardCnt - 5 * (page-1)-status.index}</td>
+							<td style="text-align:left; padding-left:${vo.depth*20}px">
+							<c:if test="${vo.depth>0 }">
+								<img src="${pageContext.request.contextPath }/assets/images/reply.png">
+							</c:if>
+								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title}</a></td>
+							<td>${vo.userNo}</td>
+							<td>${vo.hit }</td>
+							<td>${vo.reg_date }</td>
+								<td>
+									<c:if test="${authUser.no == vo.userNo}">
+										<a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a>
+									</c:if>
+								</td>
+						</tr>
+					</c:forEach>
 				</table>
+				
+				<!-- pager 추가 -->
+				<div class="pager">
+					<ul>
+						<li>
+						<c:choose>
+							<c:when test="${page-1 >0}">
+								<a href="${pageContext.request.contextPath }/board?a=list&page=${page-1}">◀</a>
+							</c:when>
+							<c:otherwise>
+								<p>◀</p>
+							</c:otherwise>
+						</c:choose>
+						</li>
+						<c:choose>
+							<c:when test="${boardCnt%5==0 }">
+								<c:set var="end" value="${boardCnt/5 }"></c:set>
+							</c:when>
+							<c:otherwise>
+								<c:set var="end" value="${boardCnt/5+1 }"></c:set>
+							</c:otherwise>
+						</c:choose>
+						<c:forEach var="i" begin="1" end="${end }" step="1">
+							<c:choose>
+								<c:when test="${page ==i}">
+									<li class="selected">${i }</li>
+								</c:when>
+								<c:otherwise>
+									<a href="${pageContext.request.contextPath }/board?a=list&page=${i}">${i }</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+<!-- 						<li class="selected"><a href="">1</a></li>
+						<li>2</li>
+						<li><a href="">3</a></li>
+						<li>4</li>
+						<li>5</li> -->
+						<li>
+							<c:choose>
+									<c:when test="${page+1 <boardCnt/5+1}">
+									<a href="${pageContext.request.contextPath }/board?a=list&page=${page+1}">▶</a>
+								</c:when>
+								<c:otherwise>
+									<p>▶</p>
+								</c:otherwise>
+							</c:choose>
+						</li>
+					</ul>
+				</div>					
+				<!-- pager 추가 -->
+
 				<div class="bottom">
-					<a href="" id="new-book">글쓰기</a>
-				</div>				
+					<c:if test="${not empty authUser}">
+						<a href="${pageContext.request.contextPath}/board?a=writeform&no=${-1}" id="new-book">글쓰기</a>
+					</c:if>
+				</div>
 			</div>
 		</div>
 		<jsp:include page="/WEB-INF/views/includes/navigation.jsp" />
