@@ -26,16 +26,17 @@ public class ViewAction implements Action {
 		request.setAttribute("vo", vo);
 		MvcUtil.forward("board/view", request, response);
 		
-//		Cookie viewCookie = null;
+//		Long visitCount = vo.getHit();
 //		Cookie[] cookies = request.getCookies();
-//		if(cookies != null) { // 쿠키의 값이 있을 때 
-//			for (int i = 0;i<cookies.length;i++) {
-//				if(cookies[i].getName().equals("|"+bidx+"|") {
-//					
-//				}
-//			}
-//		} else {	// 쿠키의 값이 없을 때
+//		for(Cookie cookie:cookies) System.out.println(cookie.getComment());
+//		if(cookies!= null && cookies.length>0) {
+//			System.out.println("cookie 생존 visitCount : "+visitCount);
+//		} else {
+//			hitVo.setHit(vo.getHit()+1);
 //			
+//			Cookie cookie = new Cookie("visitCount",String.valueOf(visitCount));
+//			cookie.setPath(request.getContextPath());
+//			cookie.setMaxAge(24*60*60);
 //		}
 	}
 }
