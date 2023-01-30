@@ -16,11 +16,12 @@
 	<div id="container">
 		<c:import url="/WEB-INF/views/includes/header.jsp"/>		<div id="content">
 			<div id="user">
-				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/update">
+				<form id="join-form" name="joinForm" method="post" action="${pageContext.request.contextPath}/user/update/">
+					<input type="hidden" name ="a" value="update">
 					<label class="block-label" for="name" >이름</label> 
-					<input id="name" name="name" type="text" value="${vo.name}"> 
+					<input id="name" name="name" type="text" value="${authUser.name}"> 
 					<label class="block-label" for="email">이메일</label> 
-					<h4>${vo.email}</h4>
+					<h4>${authUser.email}</h4>
 					
 					<label class="block-label">패스워드</label> 
 					<input name="password" type="password" value="">
@@ -28,7 +29,7 @@
 					<fieldset>
 						<legend>성별</legend>
 						<c:choose>
-							<c:when test="${'female' == vo.gender}">
+							<c:when test="${'female' == authUser.gender}">
 								<label>여</label><input type="radio" name="gender" value="female" checked="checked"> 
 								<label>남</label> <input type="radio" name="gender" value="male">
 							</c:when>
