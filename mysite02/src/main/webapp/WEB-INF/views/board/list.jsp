@@ -34,7 +34,7 @@
 					</tr>		
 					<!--<c:set var="count" value="${fn:length(list)}"></c:set> -->
 					<c:forEach items="${list}" var="vo" varStatus="status">
-						<!--<c:if test="${count-index-5*(page-1)>=vo &count-index-5*page+1<=vo }"></c:if> -->
+						
 						<tr>
 							<td>${boardCnt - 5 * (page-1)-status.index}</td>
 							<td style="text-align:left; padding-left:${vo.depth*20}px">
