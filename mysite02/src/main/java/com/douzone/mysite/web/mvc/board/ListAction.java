@@ -16,18 +16,19 @@ public class ListAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String search = request.getParameter("kwd");
+		String search = request.getParameter("kwd")==null?"":request.getParameter("kwd");
 		String page = request.getParameter("page")!=null?request.getParameter("page"):"1";
+		request.setAttribute("keyword", search);
 		request.setAttribute("page", page);
 		List<BoardVo> list = null;
 		int cnt;
 		Long max = new BoardDao().maxgNo();
-		if (search == null || search.equals("")) {
-			list = new BoardDao().findAll();
-
-		} else {
-			list = new BoardDao().findTitle(search);
-		}
+		list = new BoardDao().findAll2(search);
+//		if (search == null || search.equals("")) {
+//			list = new BoardDao().findAll();
+//		} else {
+//			list = new BoardDao().findTitle(search);
+//		}
 		cnt = list.size();
 		int integerPage = Integer.parseInt(page);
 		int start = (integerPage -1)*5;

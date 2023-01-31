@@ -20,7 +20,8 @@
 			<div id="board">
 				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
 					<input type="hidden" name="a" value="search">
-					<input type="text" id="kwd" name="kwd" value="">
+					<input type="hidden" name="keyword" value="${keyword}">
+					<input type="text" id="kwd" name="kwd" value="${keyword }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -60,7 +61,7 @@
 						<li>
 						<c:choose>
 							<c:when test="${page-1 >0}">
-								<a href="${pageContext.request.contextPath }/board?a=list&page=${page-1}">◀</a>
+								<a href="${pageContext.request.contextPath }/board?a=list&page=${page-1}&kwd=${keyword}">◀</a>
 							</c:when>
 							<c:otherwise>
 								<p>◀</p>
@@ -81,7 +82,7 @@
 									<li class="selected">${i }</li>
 								</c:when>
 								<c:otherwise>
-									<a href="${pageContext.request.contextPath }/board?a=list&page=${i}">${i }</a>
+									<a href="${pageContext.request.contextPath }/board?a=list&page=${i}&kwd=${keyword}">${i }</a>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -93,7 +94,7 @@
 						<li>
 							<c:choose>
 									<c:when test="${page+1 <boardCnt/5+1}">
-									<a href="${pageContext.request.contextPath }/board?a=list&page=${page+1}">▶</a>
+									<a href="${pageContext.request.contextPath }/board?a=list&page=${page+1}&kwd=${keyword}">▶</a>
 								</c:when>
 								<c:otherwise>
 									<p>▶</p>
