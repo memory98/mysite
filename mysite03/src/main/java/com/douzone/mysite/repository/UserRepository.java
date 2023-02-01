@@ -1,11 +1,13 @@
 package com.douzone.mysite.repository;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.douzone.mysite.exception.UserRepositoryException;
@@ -13,14 +15,14 @@ import com.douzone.mysite.vo.UserVo;
 @Repository
 public class UserRepository {
 
+	@Autowired
+	private DataSource dataSource;
 	public void insert(UserVo vo) {
-		boolean result = false;
-
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "insert into user values(null,?,?,password(?),?,now())";
 			pstmt = conn.prepareStatement(sql);
@@ -55,9 +57,9 @@ public class UserRepository {
 		ResultSet rs = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
-			String sql = "elect no,name,email,gender from user where email = ? and password = password(?)";
+			String sql = "select no,name,email,gender from user where email = ? and password = password(?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getEmail());
 			pstmt.setString(2, vo.getPassword());
@@ -105,7 +107,7 @@ public class UserRepository {
 		ResultSet rs = null;
 
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 
 			String sql = "select no,name,email,password,gender from user where no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -149,7 +151,7 @@ public class UserRepository {
 		ResultSet rs = null;
 		String sql = "";
 		try {
-			conn = getConnection();
+			conn = dataSource.getConnection();
 			switch(i) {
 			case 1:
 				sql = "update user set gender=? where no = ?";
@@ -207,18 +209,4 @@ public class UserRepository {
 		}
 		return result;
 	}
-	
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			String url = "jdbc:mariadb://192.168.10.111:3307/webdb?charset=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
-		}
-		return conn;
-	}
-
 }
