@@ -18,9 +18,8 @@
 		<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form id="search_form" action="${pageContext.request.contextPath }/board" method="post">
-					<input type="hidden" name="a" value="search">
-					<input type="text" id="kwd" name="kwd" value="${keyword }">
+				<form id="search_form" action="${pageContext.request.contextPath }/board/list" method="post">
+					<input type="text" id="kwd" name="keyword" value="${keyword }">
 					<input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
@@ -41,13 +40,13 @@
 							<c:if test="${vo.depth>0 }">
 								<img src="${pageContext.request.contextPath }/assets/images/reply.png">
 							</c:if>
-								<a href="${pageContext.request.contextPath }/board?a=view&no=${vo.no}">${vo.title}</a></td>
+								<a href="${pageContext.request.contextPath }/board/view/no=${vo.no}">${vo.title}</a></td>
 							<td>${vo.userName}</td>
 							<td>${vo.hit }</td>
 							<td>${vo.reg_date }</td>
 								<td>
 									<c:if test="${authUser.no == vo.userNo}">
-										<a href="${pageContext.request.contextPath}/board?a=delete&no=${vo.no}" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board/delete/no=${vo.no}" class="del">삭제</a>
 									</c:if>
 								</td>
 						</tr>
@@ -60,7 +59,7 @@
 						<li>
 						<c:choose>
 							<c:when test="${page-1 >0}">
-								<a href="${pageContext.request.contextPath }/board?a=list&page=${page-1}&kwd=${keyword}">◀</a>
+								<a href="${pageContext.request.contextPath }/board/list/page=${page-1}/keyword=${keyword}">◀</a>
 							</c:when>
 							<c:otherwise>
 								<p>◀</p>
@@ -81,7 +80,7 @@
 									<li class="selected">${i }</li>
 								</c:when>
 								<c:otherwise>
-									<a href="${pageContext.request.contextPath }/board?a=list&page=${i}&kwd=${keyword}">${i }</a>
+									<a href="${pageContext.request.contextPath }/board/list/page=${i}/keyword=${keyword}">${i }</a>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
@@ -93,7 +92,7 @@
 						<li>
 							<c:choose>
 									<c:when test="${page+1 <boardCnt/5+1}">
-									<a href="${pageContext.request.contextPath }/board?a=list&page=${page+1}&kwd=${keyword}">▶</a>
+									<a href="${pageContext.request.contextPath }/board/list/page=${page+1}/keyword=${keyword}">▶</a>
 								</c:when>
 								<c:otherwise>
 									<p>▶</p>
@@ -106,7 +105,7 @@
 
 				<div class="bottom">
 					<c:if test="${not empty authUser}">
-						<a href="${pageContext.request.contextPath}/board?a=writeform&no=${-1}" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath}/board/write/${-1}" id="new-book">글쓰기</a>
 					</c:if>
 				</div>
 			</div>

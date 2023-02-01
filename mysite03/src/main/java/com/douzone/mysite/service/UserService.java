@@ -17,7 +17,7 @@ public class UserService {
 
 	public UserVo getUser(UserVo vo) {
 		
-		return userRepository.findByEmailAndPassword(vo);
+		return userRepository.findByEmailAndPassword(vo.getEmail(),vo.getPassword());
 	}
 
 	public UserVo update(UserVo vo, UserVo authUser) {
@@ -41,7 +41,6 @@ public class UserService {
 		}
 		
 		return updateUser;
-//		authUser.setName(updateUser.getName());
 	}
 
 	public UserVo findNo(Long no) {

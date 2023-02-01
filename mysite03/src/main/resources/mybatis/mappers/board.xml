@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+<!-- 
+	<resultMap id="findAllList" type="boardvo">
+		<id property="no" column="no"/>
+		<result property="title" column="title" />
+		<result property="contents" column="contents" />
+		<result property="hit" column="hit" />
+		<result property="reg_date" column="reg_date" />
+		<result property="gNo" column="gNo" />
+		<result property="oNo" column="oNo" />
+		<result property="depth" column="depth" />
+		<result property="userNo" column="userNo" />
+		<result property="userName" column="userName" />
+	</resultMap>
+ -->
+	<insert id="insert" parameterType="boardvo">
+	<![CDATA[
+		insert 
+		into board 
+		value(null,#{title},#{contents},0,now(),#{gNo},#{oNo},#{depth},#{userNo})
+	]]>
+	<selectKey keyProperty="no" resultType="long" order="AFTER">
+		<![CDATA[
+		select last_insert_id()
+		]]>
+	</selectKey>
+	</insert>
+<!-- 	
+	<select id="findAll" resultMap="findAllList" parameterType="string">
+	 <![CDATA[
+		 	select 
+	 	b.no as no, b.title as title, b.contents as contents, b.hit as hit, b.reg_date as reg_date, b.g_no as gNo,b.o_no as oNo,b.depth as depth,u.no as userNo,u.name as userName
+		 		from board b join user u 
+		 	   on b.user_no = u.no 
+		 		where title LIKE '%#{search}%' 
+		 		group by b.g_no desc, o_no asc
+	 ]]>
+	</select>
+ -->
+ 
+	 <select id="findNo" resultType="boardvo" parameterType="long">
+	 	 <![CDATA[
+	 		 select * from board where no = #{num}
+	 	 ]]>
+	 </select>
+</mapper>

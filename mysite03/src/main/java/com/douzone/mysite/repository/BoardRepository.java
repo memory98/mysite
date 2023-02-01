@@ -1,4 +1,4 @@
-package com.douzone.mysite.dao;
+package com.douzone.mysite.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,54 +8,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import com.douzone.mysite.vo.BoardVo;
 
-public class BoardDao {
-
+@Repository
+public class BoardRepository {
+	@Autowired
+	private DataSource dataSource;
+	@Autowired
+	private SqlSession sqlSession;
 	public void insert(BoardVo vo) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-
-		try {
-			conn = getConnection();
-
-			String sql = "insert into board value(null,?,?,0,now(),?,?,?,?)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, vo.getTitle());
-			pstmt.setString(2, vo.getContents());
-			pstmt.setLong(3, vo.getgNo());
-			pstmt.setLong(4, vo.getoNo());
-			pstmt.setLong(5, vo.getDepth());
-			pstmt.setLong(6, vo.getUserNo());
-			pstmt.executeUpdate();
-
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		sqlSession.insert("board.insert",vo);
 	}
 
-	public List<BoardVo> findAll() {
+	public List<BoardVo> findAll(String search) {
+//		List<BoardVo> result = sqlSession.selectList(search, search);
 		List<BoardVo> result = new ArrayList<>();
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-//		int cnt= 5;
 		try {
 			conn = getConnection();
 
-			String sql = "select * from board order by g_no desc, o_no asc";
+			String sql = "select b.no, b.title, b.contents, b.hit, b.reg_date, b.g_no,b.o_no,b.depth,u.no,u.name "
+					+ "from board b join user u on b.user_no = u.no "
+					+ "where title LIKE  '%"+search+"%' group by g_no desc, o_no asc";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
@@ -68,6 +51,7 @@ public class BoardDao {
 				Long oNo = rs.getLong(7);
 				Long depth = rs.getLong(8);
 				Long userNo = rs.getLong(9);
+				String userName = rs.getString(10);
 
 				BoardVo vo = new BoardVo();
 				vo.setNo(no);
@@ -79,7 +63,7 @@ public class BoardDao {
 				vo.setoNo(oNo);
 				vo.setDepth(depth);
 				vo.setUserNo(userNo);
-
+				vo.setUserName(userName);
 				result.add(vo);
 			}
 
@@ -106,61 +90,7 @@ public class BoardDao {
 	}
 
 	public BoardVo findNo(Long num) {
-		BoardVo result = new BoardVo();
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-
-		try {
-			conn = getConnection();
-
-			String sql = "select * from board where no = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setLong(1, num);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String contents = rs.getString(3);
-				Long hit = rs.getLong(4);
-				String regDate = rs.getString(5);
-				Long gNo = rs.getLong(6);
-				Long oNo = rs.getLong(7);
-				Long depth = rs.getLong(8);
-				Long userNo = rs.getLong(9);
-
-				result.setNo(no);
-				result.setTitle(title);
-				result.setContents(contents);
-				result.setHit(hit);
-				result.setReg_date(regDate);
-				result.setgNo(gNo);
-				result.setoNo(oNo);
-				result.setDepth(depth);
-				result.setUserNo(userNo);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
+		BoardVo result = sqlSession.selectOne("findNo",num);
 		return result;
 	}
 	
@@ -203,7 +133,7 @@ public class BoardDao {
 	}
 	
 	// 삭제 기능
-	public Boolean deleteNo(Long no) {
+	public Boolean deleteNo(Long no,Long userNo) {
 		boolean result = false;
 
 		Connection conn = null;
@@ -212,10 +142,10 @@ public class BoardDao {
 		try {
 			conn = getConnection();
 
-			String sql = "delete from board where no = ?";
+			String sql = "delete from board where no = ? and user_no = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setLong(1, no);
-
+			pstmt.setLong(2, userNo);
 			int count = pstmt.executeUpdate();
 
 			result = count == 1;
@@ -419,67 +349,5 @@ public class BoardDao {
 			System.out.println("드라이버 로딩 실패:" + e);
 		}
 		return conn;
-	}
-
-	public List<BoardVo> findAll2(String search) {
-		List<BoardVo> result = new ArrayList<>();
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-
-			String sql = "select b.no, b.title, b.contents, b.hit, b.reg_date, b.g_no,b.o_no,b.depth,u.no,u.name "
-					+ "from board b join user u on b.user_no = u.no "
-					+ "where title LIKE  '%"+search+"%' group by g_no desc, o_no asc";
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String contents = rs.getString(3);
-				Long hit = rs.getLong(4);
-				String regDate = rs.getString(5);
-				Long gNo = rs.getLong(6);
-				Long oNo = rs.getLong(7);
-				Long depth = rs.getLong(8);
-				Long userNo = rs.getLong(9);
-				String userName = rs.getString(10);
-
-				BoardVo vo = new BoardVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setContents(contents);
-				vo.setHit(hit);
-				vo.setReg_date(regDate);
-				vo.setgNo(gNo);
-				vo.setoNo(oNo);
-				vo.setDepth(depth);
-				vo.setUserNo(userNo);
-				vo.setUserName(userName);
-				result.add(vo);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return result;
 	}
 }
