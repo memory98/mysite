@@ -41,8 +41,12 @@
 						<a href="${pageContext.request.contextPath}/board/write/${vo.no}">댓글쓰기</a>
 					</c:if>
 					<a href="${pageContext.request.contextPath}/board/list">글목록</a>
-					<c:if test="${authUser.no == vo.userNo }">
+					
 						<a href="${pageContext.request.contextPath}/board/modify/no=${vo.no}">글수정</a>
+						<p>${authUser.no }</p>
+						<p>${vo.userNo }</p>
+					<c:if test="${authUser.no == vo.userNo }">
+						<p>gdgd</p>
 					</c:if>
 				</div>
 			</div>
