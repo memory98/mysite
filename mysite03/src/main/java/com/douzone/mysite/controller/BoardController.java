@@ -31,10 +31,8 @@ public class BoardController {
 		Long max = boardService.maxgNo();
 		List<BoardVo> list = boardService.getContentsList(keyword);
 		int cnt = list.size();
-		int integerPage = Integer.parseInt(page);
-		int start = (integerPage - 1) * 5;
-		int end = (5 * integerPage) > cnt - 1 ? cnt : (5 * integerPage);
-		list = list.subList(start, end);
+		list = boardService.split(list,page);
+		
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("boardCnt", cnt);
@@ -74,6 +72,7 @@ public class BoardController {
 
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String write(Model model,HttpSession session,Long number,BoardVo vo) {
+		System.out.println("number : "+number);
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		if (!vo.getTitle().equals("") && !vo.getContents().equals("")) {
 			if (number == -1) {
@@ -81,10 +80,11 @@ public class BoardController {
 				vo.setgNo(boardService.maxgNo() + 1);
 				vo.setDepth(0);
 			} else {
-				vo = boardService.findNo(number);
-				vo.setoNo(vo.getoNo() + 1);
+				BoardVo findBoard = boardService.findNo(number);
+				vo.setgNo(findBoard.getgNo());
+				vo.setoNo(findBoard.getoNo() + 1);
 				boardService.updateoNo(vo.getgNo(), vo.getoNo());
-				vo.setDepth(vo.getDepth() + 1);
+				vo.setDepth(findBoard.getDepth() + 1);
 			}
 			vo.setUserNo(authUser.getNo());
 			boardService.addContents(vo);
@@ -94,7 +94,8 @@ public class BoardController {
 	
 	@RequestMapping(value="/view/no={no}")
 	public String view(Model model,@PathVariable("no") Long no) {
-		BoardVo vo = boardService.findNo(no);
+		BoardVo vo = boardService.getContents(no);
+		System.out.println("boardvo : "+vo);
 		BoardVo hitVo = new BoardVo();
 		hitVo.setHit(vo.getHit()+1);
 		hitVo.setNo(vo.getNo());
@@ -116,10 +117,10 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@RequestMapping(value="/delete/no={no}")
-	public String delete(@PathVariable("no") Long no,HttpSession session) {
+	@RequestMapping(value="/delete/no={no}/page={page}/keyword={keyword}")
+	public String delete(@PathVariable("no") Long no,@PathVariable Long page,@PathVariable String keyword,HttpSession session) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		boardService.deleteContents(no, authUser.getNo());
-		return "redirect:/board/list";
+		return "redirect:/board/list/page="+page+"/keyword="+keyword;
 	}
 }

@@ -31,11 +31,12 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>		
+					<c:set var="pageSize" value="${10}"></c:set>
 					<!--<c:set var="count" value="${fn:length(list)}"></c:set> -->
 					<c:forEach items="${list}" var="vo" varStatus="status">
 						
 						<tr>
-							<td>${boardCnt - 5 * (page-1)-status.index}</td>
+							<td>${boardCnt - pageSize * (page-1)-status.index}</td>
 							<td style="text-align:left; padding-left:${vo.depth*20}px">
 							<c:if test="${vo.depth>0 }">
 								<img src="${pageContext.request.contextPath }/assets/images/reply.png">
@@ -46,7 +47,7 @@
 							<td>${vo.reg_date }</td>
 								<td>
 									<c:if test="${authUser.no == vo.userNo}">
-										<a href="${pageContext.request.contextPath}/board/delete/no=${vo.no}" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board/delete/no=${vo.no}/page=${page}/keyword=${keyword}" class="del">삭제</a>
 									</c:if>
 								</td>
 						</tr>
@@ -67,11 +68,11 @@
 						</c:choose>
 						</li>
 						<c:choose>
-							<c:when test="${boardCnt%5==0 }">
-								<c:set var="end" value="${boardCnt/5 }"></c:set>
+							<c:when test="${boardCnt%pageSize==0 }">
+								<c:set var="end" value="${boardCnt/pageSize }"></c:set>
 							</c:when>
 							<c:otherwise>
-								<c:set var="end" value="${boardCnt/5+1 }"></c:set>
+								<c:set var="end" value="${boardCnt/pageSize+1 }"></c:set>
 							</c:otherwise>
 						</c:choose>
 						<c:forEach var="i" begin="1" end="${end }" step="1">
@@ -84,14 +85,9 @@
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
-<!-- 						<li class="selected"><a href="">1</a></li>
-						<li>2</li>
-						<li><a href="">3</a></li>
-						<li>4</li>
-						<li>5</li> -->
 						<li>
 							<c:choose>
-									<c:when test="${page+1 <boardCnt/5+1}">
+									<c:when test="${page+1 <boardCnt/pageSize+1}">
 									<a href="${pageContext.request.contextPath }/board/list/page=${page+1}/keyword=${keyword}">▶</a>
 								</c:when>
 								<c:otherwise>

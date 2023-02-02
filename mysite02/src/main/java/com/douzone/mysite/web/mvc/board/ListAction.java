@@ -13,7 +13,7 @@ import com.douzone.web2.mvc.Action;
 import com.douzone.web2.util.MvcUtil;
 
 public class ListAction implements Action {
-
+	private static final int pageSize = 10;
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String search = request.getParameter("kwd")==null?"":request.getParameter("kwd");
@@ -31,8 +31,8 @@ public class ListAction implements Action {
 //		}
 		cnt = list.size();
 		int integerPage = Integer.parseInt(page);
-		int start = (integerPage -1)*5;
-		int end = (5 * integerPage)>cnt-1?cnt:(5 * integerPage);
+		int start = (integerPage -1)*pageSize;
+		int end = (pageSize * integerPage)>cnt-1?cnt:(pageSize * integerPage);
 		list = list.subList(start,end);
 		request.setAttribute("list", list);
 		request.setAttribute("boardCnt", cnt);
