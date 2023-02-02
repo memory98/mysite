@@ -432,7 +432,7 @@ public class BoardDao {
 
 			String sql = "select b.no, b.title, b.contents, b.hit, b.reg_date, b.g_no,b.o_no,b.depth,u.no,u.name "
 					+ "from board b join user u on b.user_no = u.no "
-					+ "where title LIKE  '%"+search+"%' group by g_no desc, o_no asc";
+					+ "where title LIKE '%"+search+"%' group by g_no desc, o_no asc";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {

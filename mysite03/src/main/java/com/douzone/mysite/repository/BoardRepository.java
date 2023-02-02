@@ -27,109 +27,19 @@ public class BoardRepository {
 	}
 
 	public List<BoardVo> findAll(String search) {
-//		List<BoardVo> result = sqlSession.selectList(search, search);
-		List<BoardVo> result = new ArrayList<>();
-
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-
-			String sql = "select b.no, b.title, b.contents, b.hit, b.reg_date, b.g_no,b.o_no,b.depth,u.no,u.name "
-					+ "from board b join user u on b.user_no = u.no "
-					+ "where title LIKE  '%"+search+"%' group by g_no desc, o_no asc";
-			pstmt = conn.prepareStatement(sql);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Long no = rs.getLong(1);
-				String title = rs.getString(2);
-				String contents = rs.getString(3);
-				Long hit = rs.getLong(4);
-				String regDate = rs.getString(5);
-				Long gNo = rs.getLong(6);
-				Long oNo = rs.getLong(7);
-				Long depth = rs.getLong(8);
-				Long userNo = rs.getLong(9);
-				String userName = rs.getString(10);
-
-				BoardVo vo = new BoardVo();
-				vo.setNo(no);
-				vo.setTitle(title);
-				vo.setContents(contents);
-				vo.setHit(hit);
-				vo.setReg_date(regDate);
-				vo.setgNo(gNo);
-				vo.setoNo(oNo);
-				vo.setDepth(depth);
-				vo.setUserNo(userNo);
-				vo.setUserName(userName);
-				result.add(vo);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		} finally {
-			try {
-				if (rs != null) {
-					rs.close();
-				}
-
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		List<BoardVo> result = sqlSession.selectList("board.findAll", search);
 		return result;
 	}
 
 	public BoardVo findNo(Long num) {
 		BoardVo result = sqlSession.selectOne("findNo",num);
+		System.out.println(result);
 		return result;
 	}
 	
 	// 글 수정 기능
 	public void update(BoardVo vo) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		String sql="";
-		try {
-			conn = getConnection();
-			if(vo.getTitle()==null & vo.getContents()==null) {
-				sql = "update board set hit=? where no=?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setLong(1, vo.getHit());
-				pstmt.setLong(2, vo.getNo());
-			} else {
-				sql = "update board set title=?,contents=? where no=?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, vo.getTitle());
-				pstmt.setString(2, vo.getContents());
-				pstmt.setLong(3, vo.getNo());
-			}
-
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-			System.out.println("Error:" + e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		sqlSession.selectOne("board.update",vo);
 	}
 	
 	// 삭제 기능

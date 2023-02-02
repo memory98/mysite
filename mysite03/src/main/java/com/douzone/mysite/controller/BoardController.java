@@ -46,7 +46,6 @@ public class BoardController {
 	public String index(Model model) {
 		String keyword = "";
 		String page = "1";
-		System.out.println("1");
 		list(model,keyword,page);
 		return "/board/list";
 	}
@@ -54,9 +53,6 @@ public class BoardController {
 	@RequestMapping(value = "/list", method = RequestMethod.POST)
 	public String index(Model model,String keyword) {
 		String page = "1";
-		System.out.println("2");
-		System.out.println("page : "+page);
-		System.out.println("keyword : "+keyword);
 		page =page==null?"1":page;
 		list(model,keyword,page);
 		return "/board/list";
@@ -64,9 +60,6 @@ public class BoardController {
 	
 	@RequestMapping(value = "/list/page={page}/keyword={keyword}")
 	public String index(Model model, @PathVariable("page") String page,@PathVariable("keyword") String keyword) {
-		System.out.println("3");
-		System.out.println("page : "+page);
-		System.out.println("keyword : "+keyword);
 		keyword = keyword == null ? keyword = "" : keyword;
 		page =page==null?"1":page;
 		list(model,keyword,page);

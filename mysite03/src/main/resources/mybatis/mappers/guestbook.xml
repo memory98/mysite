@@ -3,6 +3,7 @@
 
 <mapper namespace="guestbook">
 
+<!-- 
 	<resultMap id="findAllList" type="guestbookvo">
 		<id property="no" column="no" />
 		<result property="name" column="name" />
@@ -10,14 +11,15 @@
 		<result property="regDate" column="reg_date" />
 	</resultMap>
 
-	<!-- 
+ -->
 	<select id="findAll" resultType="guestbookvo"> 
 	<![CDATA[ select no, 
 		name, message, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as regDate from 
 		guestbook order by reg_date desc ]]> 
 	</select> 
-	-->
 
+
+<!-- 
 	<select id="findAll" resultMap="findAllList">
 	 <![CDATA[
 	 	select no, name, message, reg_date
@@ -25,7 +27,7 @@
 	 	order by reg_date desc
 	 ]]>
 	</select>
-	
+ -->
 	<insert id="insert" parameterType="guestbookvo">
 		<![CDATA[
 		insert
