@@ -47,7 +47,7 @@
 							<td>${vo.reg_date }</td>
 								<td>
 									<c:if test="${authUser.no == vo.userNo}">
-										<a href="${pageContext.request.contextPath}/board/delete/no=${vo.no}/page=${page}/keyword=${keyword}" class="del">삭제</a>
+										<a href="${pageContext.request.contextPath}/board/delete?no=${vo.no}&page=${page}&keyword=${keyword}" class="del">삭제</a>
 									</c:if>
 								</td>
 						</tr>
@@ -60,7 +60,7 @@
 						<li>
 						<c:choose>
 							<c:when test="${page-1 >0}">
-								<a href="${pageContext.request.contextPath }/board/list/page=${page-1}/keyword=${keyword}">◀</a>
+								<a href="${pageContext.request.contextPath }/board/list?page=${page-1}&keyword=${keyword}">◀</a>
 							</c:when>
 							<c:otherwise>
 								<p>◀</p>
@@ -81,14 +81,14 @@
 									<li class="selected">${i }</li>
 								</c:when>
 								<c:otherwise>
-									<a href="${pageContext.request.contextPath }/board/list/page=${i}/keyword=${keyword}">${i }</a>
+									<a href="${pageContext.request.contextPath }/board/list?page=${i}&keyword=${keyword}">${i }</a>
 								</c:otherwise>
 							</c:choose>
 						</c:forEach>
 						<li>
 							<c:choose>
 									<c:when test="${page+1 <boardCnt/pageSize+1}">
-									<a href="${pageContext.request.contextPath }/board/list/page=${page+1}/keyword=${keyword}">▶</a>
+									<a href="${pageContext.request.contextPath }/board/list?page=${page+1}&keyword=${keyword}">▶</a>
 								</c:when>
 								<c:otherwise>
 									<p>▶</p>

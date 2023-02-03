@@ -41,8 +41,10 @@
 						<a href="${pageContext.request.contextPath}/board?a=writeform&no=${vo.no}">댓글쓰기</a>
 					</c:if>
 					<a href="${pageContext.request.contextPath}/board">글목록</a>
-					<a href="${pageContext.request.contextPath}/board?a=modify&no=${vo.no}">글수정</a>
-				</div>
+					<c:if test="${authUser.no == vo.userNo }">
+						<a href="${pageContext.request.contextPath}/board?a=modify&no=${vo.no}">글수정</a>
+					</c:if>
+					</div>
 			</div>
 		</div>
 		<jsp:include page="/WEB-INF/views/includes/navigation.jsp" />

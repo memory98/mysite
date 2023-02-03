@@ -4,12 +4,14 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
@@ -26,41 +28,25 @@ public class BoardController {
 	public String list() {
 		return "redirect:/board/list";
 	}
-	
-	public void list(Model model,String keyword,String page) {
+
+	@RequestMapping(value = "/list")
+	public String index(Model model, @RequestParam(value = "page", required=false, defaultValue = "1") Long page,@RequestParam(value = "keyword", required=false, defaultValue = "") String keyword) {
+		System.out.println(3);
+		keyword=keyword==null?"":keyword;
+		System.out.println("page : "+page);
+		System.out.println("keyword : "+keyword);
+		
 		Long max = boardService.maxgNo();
 		List<BoardVo> list = boardService.getContentsList(keyword);
 		int cnt = list.size();
-		list = boardService.split(list,page);
-		
+		list = boardService.split(list,String.valueOf(page));
+		System.out.println("list : "+list);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("boardCnt", cnt);
 		model.addAttribute("maxgno", max);
 		model.addAttribute("list", list);
-	}
-
-	@RequestMapping(value = "/list")
-	public String index(Model model) {
-		String keyword = "";
-		String page = "1";
-		list(model,keyword,page);
-		return "/board/list";
-	}
-
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
-	public String index(Model model,String keyword) {
-		String page = "1";
-		page =page==null?"1":page;
-		list(model,keyword,page);
-		return "/board/list";
-	}
-	
-	@RequestMapping(value = "/list/page={page}/keyword={keyword}")
-	public String index(Model model, @PathVariable("page") String page,@PathVariable("keyword") String keyword) {
-		keyword = keyword == null ? keyword = "" : keyword;
-		page =page==null?"1":page;
-		list(model,keyword,page);
+		
 		return "/board/list";
 	}
 
@@ -117,10 +103,10 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
-	@RequestMapping(value="/delete/no={no}/page={page}/keyword={keyword}")
-	public String delete(@PathVariable("no") Long no,@PathVariable Long page,@PathVariable String keyword,HttpSession session) {
+	@RequestMapping(value="/delete")
+	public String delete(@RequestParam(value="no", required=true, defaultValue="") Long no,@RequestParam(value= "page",required=false, defaultValue="") Long page,@RequestParam(value = "keyword",required=false, defaultValue="") String keyword,HttpSession session) {
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
 		boardService.deleteContents(no, authUser.getNo());
-		return "redirect:/board/list/page="+page+"/keyword="+keyword;
+		return "redirect:/board/list?page="+page+"&keyword="+keyword;
 	}
 }
