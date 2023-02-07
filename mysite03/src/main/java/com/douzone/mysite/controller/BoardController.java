@@ -2,9 +2,6 @@ package com.douzone.mysite.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.douzone.mysite.security.Auth;
+import com.douzone.mysite.security.AuthUser;
 import com.douzone.mysite.service.BoardService;
 import com.douzone.mysite.vo.BoardVo;
 import com.douzone.mysite.vo.UserVo;
@@ -31,16 +30,12 @@ public class BoardController {
 
 	@RequestMapping(value = "/list")
 	public String index(Model model, @RequestParam(value = "page", required=false, defaultValue = "1") Long page,@RequestParam(value = "keyword", required=false, defaultValue = "") String keyword) {
-		System.out.println(3);
 		keyword=keyword==null?"":keyword;
-		System.out.println("page : "+page);
-		System.out.println("keyword : "+keyword);
 		
 		Long max = boardService.maxgNo();
 		List<BoardVo> list = boardService.getContentsList(keyword);
 		int cnt = list.size();
 		list = boardService.split(list,String.valueOf(page));
-		System.out.println("list : "+list);
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("page", page);
 		model.addAttribute("boardCnt", cnt);
@@ -49,17 +44,19 @@ public class BoardController {
 		
 		return "/board/list";
 	}
-
+	@Auth()
 	@RequestMapping(value = "/write/{no}", method = RequestMethod.GET)
 	public String write(Model model, @PathVariable("no") Long no) {
 		model.addAttribute("number", no);
 		return "/board/write";
 	}
 
+	@Auth
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String write(Model model,HttpSession session,Long number,BoardVo vo) {
-		System.out.println("number : "+number);
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+	public String write(
+			Model model,
+			@AuthUser UserVo authUser,
+			Long number,BoardVo vo) {
 		if (!vo.getTitle().equals("") && !vo.getContents().equals("")) {
 			if (number == -1) {
 				vo.setoNo(1);
@@ -89,9 +86,12 @@ public class BoardController {
 		model.addAttribute("vo", vo);
 		return "/board/view";
 	}
-	
+	@Auth
 	@RequestMapping(value="/modify/no={no}")
-	public String modify(Model model,@PathVariable("no") Long no) {
+	public String modify(
+			@AuthUser UserVo authUser,
+			Model model,
+			@PathVariable("no") Long no) {
 		BoardVo vo = boardService.getContents(no);
 		model.addAttribute("vo", vo);
 		return "/board/modify";
@@ -103,9 +103,13 @@ public class BoardController {
 		return "redirect:/board/list";
 	}
 	
+	@Auth
 	@RequestMapping(value="/delete")
-	public String delete(@RequestParam(value="no", required=true, defaultValue="") Long no,@RequestParam(value= "page",required=false, defaultValue="") Long page,@RequestParam(value = "keyword",required=false, defaultValue="") String keyword,HttpSession session) {
-		UserVo authUser = (UserVo) session.getAttribute("authUser");
+	public String delete(
+			@RequestParam(value="no", required=true, defaultValue="") Long no,
+			@RequestParam(value= "page",required=false, defaultValue="") Long page,
+			@RequestParam(value = "keyword",required=false, defaultValue="") String keyword,
+			@AuthUser UserVo authUser) {
 		boardService.deleteContents(no, authUser.getNo());
 		return "redirect:/board/list?page="+page+"&keyword="+keyword;
 	}

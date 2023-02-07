@@ -15,6 +15,11 @@ public class UserService {
 			userRepository.insert(vo);
 	}
 
+	public UserVo getUser(Long no) {
+		
+		return userRepository.findByNo(no);
+	}
+	
 	public UserVo getUser(UserVo vo) {
 		
 		return userRepository.findByEmailAndPassword(vo.getEmail(),vo.getPassword());
