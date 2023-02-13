@@ -1,4 +1,4 @@
-package com.douzone.mysite.security;
+package com.douzone.mysite.interceptor;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +19,11 @@ public class MainTitleInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
-		if(servletContext.getAttribute("siteVo")==null) {
+		SiteVo siteVo = (SiteVo) servletContext.getAttribute("siteVo");
+		if(siteVo==null) {
 			SiteVo vo = siteService.getSite();
 			servletContext.setAttribute("siteVo", vo);
+//			request.getServletContext().setAttribute("siteVo", vo);
 		}
 		return true;
 	}

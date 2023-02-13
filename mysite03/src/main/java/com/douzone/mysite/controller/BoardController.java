@@ -48,6 +48,7 @@ public class BoardController {
 	@RequestMapping(value = "/write/{no}", method = RequestMethod.GET)
 	public String write(Model model, @PathVariable("no") Long no) {
 		model.addAttribute("number", no);
+		System.out.println("write");
 		return "/board/write";
 	}
 
