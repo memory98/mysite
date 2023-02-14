@@ -19,7 +19,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 			// DefaultServeltHandler가 처리하는 경우(정적 자원, /assets/**)
 			return true;
 		}
-		System.out.println("write1");
 		// 2. casting
 		HandlerMethod handlerMethod = (HandlerMethod)handler;
 		
@@ -33,12 +32,10 @@ public class AuthInterceptor implements HandlerInterceptor{
 					getAnnotation(Auth.class);
 
 		}
-		System.out.println("write2");
 		// 5. Type이나 Class에 @Auth가 없는 경우
 		if(auth == null) {
 			return true;
 		}
-		System.out.println("write3");
 		//6. @Auth가 붙어 있기 때문에 인증(Authenfication) 여부 확인
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
@@ -46,7 +43,6 @@ public class AuthInterceptor implements HandlerInterceptor{
 			response.sendRedirect(request.getContextPath()+"/user/login");
 			return false;
 		}
-		System.out.println("write4");
 		//7. 권한(Authorization) 체크를 위해 @Auth의 role 가져오기("ADMIN", "USER")
 		String role = auth.role();
 		

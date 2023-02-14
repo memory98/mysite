@@ -68,4 +68,12 @@ public class UserController {
 		authUser.setGender(updateUser.getGender());
 		return "redirect:/";
 	}
+	
+	@RequestMapping("/auth")
+	public void auth() {
+	}
+	
+	@RequestMapping("/logout")
+	public void logout() {
+	}
 }
