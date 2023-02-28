@@ -24,7 +24,11 @@ public class UserService {
 		
 		return userRepository.findByEmailAndPassword(vo.getEmail(),vo.getPassword());
 	}
-
+	
+	public UserVo getUser(String email) {
+		return userRepository.findByEmail(email);
+	}
+	
 	public UserVo update(UserVo vo, UserVo authUser) {
 		UserVo updateUser = new UserVo();
 		if (vo.getName().equals(authUser.getName()) && vo.getPassword().equals("")) {
@@ -52,4 +56,6 @@ public class UserService {
 		UserVo findUser = userRepository.findByNo(no);
 		return findUser;
 	}
+
+
 }

@@ -32,6 +32,10 @@ public class UserRepository {
 		return sqlSession.selectOne("user.findByNo", no);
 	}
 
+	public UserVo findByEmail(String email) {
+		return sqlSession.selectOne("user.findByEmail",email);
+	}
+	
 	public UserVo update(int i, UserVo vo,Long no) {
 		Map<String,Object> map = new HashMap<>();
 		map.put("i", String.valueOf(i));
@@ -43,4 +47,6 @@ public class UserRepository {
 		System.out.println("map : "+map);
 		return findByNo(no);
 	}
+
+
 }
