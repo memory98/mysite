@@ -26,12 +26,24 @@ public class GuestbookController {
 		return "/guestbook/list";
 	}
 	
+	@RequestMapping(value = "/spa")
+	public String listSPA() {
+		System.out.println("listSPA method....");
+		return "/guestbook/index-spa";
+	}
+	
 	@RequestMapping(value = "add")
 	public String add(GuestbookVo vo) {
 		System.out.println(vo);
 		guestbookService.addMessage(vo);
 		System.out.println(vo);
 		return "redirect:/guestbook/list";
+	}
+	
+	@RequestMapping(value = "/spa/add")
+	public String addSPA() {
+		System.out.println("addSPA method");
+		return "redirect:/guestbook/spa";
 	}
 	
 	@RequestMapping(value = "delete/{no}",method = RequestMethod.GET)
