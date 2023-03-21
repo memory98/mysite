@@ -42,7 +42,7 @@ export default function Guestbook() {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'applcation/json'
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(message)
             });
