@@ -12,8 +12,17 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-</head>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script></head>
 <script>
+/*
+var listItemTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/list-item-template.ejs"	
+});
+var listTemplate = new EJS({
+	url: "${pageContext.request.contextPath }/assets/js/ejs/list-template.ejs"	
+});
+
+*/
 var render = function(vo, mode) {
 	var htmls = "";
 	htmls = 
@@ -23,6 +32,7 @@ var render = function(vo, mode) {
 		 "<strong></strong>"+
 		 "<a href=''>삭제</a>"+
 		 "</li>";
+	// var htmls = listItemTemplate.render(vo);
 	$("#list-guestbook")[mode?"prepend":"append"](htmls);
 //	$listLi.data("no");
 }	

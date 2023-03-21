@@ -1,1 +1,12 @@
-/target/
+##maven
+**/target/
+**/build/
+**/out
+
+##eclipse
+**/.settings
+**/.classpath
+**/.project
+
+## node(javascript) project
+**/node_modules
