@@ -1,7 +1,7 @@
 {
-  "name": "frontend-frontend",
+  "name": "mysite07-frontend",
   "version": "1.0.0",
-  "description": "```bash $ npm init -y $ npm i -D webpack webpack-cli webpack-dev-server style-loader css-loader node-sass sass-loader babel-loader @babel/core @babel/cli @babel/preset-env @babel/preset-react @babel/plugin-transform-runtime @babel/plugin-syntax-throw-expressions  $ npm i react react-dom react-addons-update react-router react-router-dom prop-types react-modal ```",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "build": "npm install && npx webpack --config config/webpack.config.js --progress --mode production",
@@ -31,6 +31,8 @@
     "react-addons-update": "^15.6.3",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0",
     "styled-components": "^5.3.9"
   }
 }

@@ -37,8 +37,8 @@ module.exports = (env) => ({
         host: "0.0.0.0",
         port: 9090,
         proxy: {
-            '/api': 'http://localhost:8088',
-            '/assets/upload-images': 'http://localhost:8080'
+            '/api': 'http://localhost:8080',
+            '/assets/gallery': 'http://localhost:8080'
         },
         liveReload: true,
         hot: false,
@@ -46,4 +46,3 @@ module.exports = (env) => ({
         historyApiFallback: true
     }
 });
-

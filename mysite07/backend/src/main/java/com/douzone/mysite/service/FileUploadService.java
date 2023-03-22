@@ -20,7 +20,7 @@ public class FileUploadService {
 			if(!uploadDirectory.exists()) {
 				uploadDirectory.mkdirs();
 			}
-			
+
 			if(file.isEmpty()) {
 				throw new RuntimeException("file upload error: image empty");
 			}

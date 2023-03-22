@@ -1,15 +1,15 @@
 import React from 'react';
-import SiteLayout from "../../layout/SiteLayout";
+import MySiteLayout from '../../layout/MySiteLayout';
 
 export default function Gallery() {
     return (
-        <SiteLayout>
+        <MySiteLayout>
             <div>
                 <h2 style={{
                     lineHeight: '200px',
                     textAlign: 'center'
                 }}>Whoops - 404 Not Found</h2>
             </div>
-        </SiteLayout>
+        </MySiteLayout>
     );
 }

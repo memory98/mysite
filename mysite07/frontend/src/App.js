@@ -1,7 +1,7 @@
 import React from 'react';
 import './assets/scss/App.scss';
 import {BrowserRouter as Router} from 'react-router-dom';
-import {Routes, Route} from 'react-router';
+import {Routes, Route} from 'react-router-dom';
 import Main from './component/main';
 import Gallery from './component/gallery';
 import Guestbook from './component/guestbook';

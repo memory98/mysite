@@ -19,18 +19,32 @@ export default function MessageList({messages, notifyMessage}) {
 
     const handleSubmit = async function (e) {
         e.preventDefault();
+        // const a = {
+        //     no: null,
+        //     name: null,
+        //     password: e.target.password.value,
+        //     message: null,
+        //     reg_date: null
+
+        // };
+
+        const a = {
+            password: e.target.password.value
+        }
+        console.log(a)
         try {
             if (e.target.password.value === '') {
                 return;
             }
-
+            console.log(e.target.password.value)
+            console.log(modalData)
             const response = await fetch(`/api/guestbook/${modalData.messageNo}`, {
                 method: 'delete',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'applcation/json'
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify({password: e.target.password.value})
+                body: JSON.stringify(a)
             });
 
             if (!response.ok) {
@@ -41,7 +55,6 @@ export default function MessageList({messages, notifyMessage}) {
             if (json.result !== 'success') {
                 throw json.message;
             }
-
             if (json.data === null) {
                 setModalData(Object.assign({}, modalData, {
                     label: '비밀번호가 일치하지 않습니다.',

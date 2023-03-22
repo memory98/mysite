@@ -14,7 +14,7 @@ export default function Guestbook() {
             const documentHeight = window.document.body.offsetHeight;
             const viewportHeight = document.documentElement.clientHeight || window.innerHeight;
             const scrollTop = document.documentElement.scrollTop;
-            if (viewportHeight + scrollTop + 10 > documentHeight) {
+            if (viewportHeight + scrollTop + 10 >                                                                                                                                                                documentHeight) {
                 fetchMessage.call(this);
             }
         }
@@ -38,6 +38,7 @@ export default function Guestbook() {
             setMessages(messages.filter((message) => message.no != no));
         },
         add: async function (message) {
+            console.log(message)
             const response = await fetch('/api/guestbook', {
                 method: 'post',
                 headers: {
@@ -46,7 +47,7 @@ export default function Guestbook() {
                 },
                 body: JSON.stringify(message)
             });
-
+            
             if (!response.ok) {
                 throw new Error(`${response.status} ${response.statusText}`);
             }
@@ -69,11 +70,10 @@ export default function Guestbook() {
         const messagesInState = this ? messagesRef.current : messages;
         const startNo = messagesInState.length === 0 ? 0 : messagesInState[messagesInState.length - 1].no;
         try {
-            const response = await fetch(`/api/guestbook/${startNo}`, {
+            const response = await fetch(`/api/guestbook?no=${startNo}`, {
                 method: 'get',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'applcation/json'
+                    'Accept': 'application/json'
                 }
             });
 

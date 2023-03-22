@@ -1,5 +1,8 @@
 package com.douzone.mysite.dto;
 
+import lombok.Getter;
+
+@Getter
 public class JsonResult {
 	private String result;  /* "success" or "fail"  */
 	private Object data;    /* if success, data set */

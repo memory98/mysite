@@ -7,29 +7,31 @@ import styles from '../../assets/scss/component/gallery/Galery.scss';
 export default function Index() {
     const [imageList, setImageList] = useState([]);
 
-    useEffect(async () => {
+    const fetchList = async () => {
         try {
-            const response = await fetch('/api/gallery', {
-                method: 'get',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'applcation/json'
-                }
-            });
+             const response = await fetch('/api/gallery', {
+                 method: 'get',
+                 headers: {
+                     'Accept': 'application/json'
+                 }
+             });
+ 
+             if (!response.ok) {
+                 throw new Error(`${response.status} ${response.statusText}`);
+             }
+ 
+             const json = await response.json();
+             if (json.result !== 'success') {
+                 throw new Error(`${json.result} ${json.message}`);
+             }
+             setImageList(json.data);
+         } catch (err) {
+             console.error(err);
+         }
+    }
 
-            if (!response.ok) {
-                throw new Error(`${response.status} ${response.statusText}`);
-            }
-
-            const json = await response.json();
-            if (json.result !== 'success') {
-                throw new Error(`${json.result} ${json.message}`);
-            }
-
-            setImageList(json.data);
-        } catch (err) {
-            console.error(err);
-        }
+    useEffect(() => {
+        fetchList();
     }, []);
 
     const notifyImage = {
@@ -40,11 +42,11 @@ export default function Index() {
                 const formData = new FormData();
                 formData.append('comments', comment);
                 formData.append('file', file);
-
+                console.log(formData)
                 // Post
                 const response = await fetch(`/api/gallery`, {
                     method: 'post',
-                    headers: {'Accept': 'applcation/json'},
+                    headers: {'Accept': 'application/json'},
                     body: formData
                 });
 
@@ -58,7 +60,6 @@ export default function Index() {
                 if (json.result !== 'success') {
                     throw json.message;
                 }
-
                 // re-rendering(update)
                 setImageList([json.data, ...imageList]);
             } catch (err) {
@@ -70,7 +71,7 @@ export default function Index() {
                 // Delete
                 const response = await fetch(`/api/gallery/${no}`, {
                     method: 'delete',
-                    headers: {'Accept': 'applcation/json'},
+                    headers: {'Accept': 'application/json'},
                     body: null
                 });
 

@@ -16,6 +16,7 @@ import com.douzone.mysite.dto.JsonResult;
 import com.douzone.mysite.service.GuestbookService;
 import com.douzone.mysite.vo.GuestbookVo;
 
+
 @RestController
 @RequestMapping("/api/guestbook")
 public class GuestbookController {
@@ -35,8 +36,19 @@ public class GuestbookController {
 	}
 
 	@DeleteMapping("/{no}")
-	public ResponseEntity<JsonResult> delete(@PathVariable("no") Long no, @RequestParam(value="password", required=true, defaultValue="") String password) {
-		Boolean result = guestbookService.deleteMessage(no, password);		
+	public ResponseEntity<JsonResult> delete(@PathVariable("no") Long no, @RequestBody GuestbookVo vo) {
+		
+		System.out.println("password : " + vo.getPassword());
+		Boolean result = guestbookService.deleteMessage(no, vo.getPassword());		
 		return ResponseEntity.status(HttpStatus.OK).body(JsonResult.success(result ? no : null));
 	}
+	
+//	@DeleteMapping("/{no}")
+//	public ResponseEntity<JsonResult> delete(@PathVariable("no") Long no, @RequestParam(value="password", required=true, defaultValue="") String password) {
+//
+//		System.out.println("password : "+password);
+//		Boolean result = guestbookService.deleteMessage(no, password);	
+////		Boolean result = true;
+//		return ResponseEntity.status(HttpStatus.OK).body(JsonResult.success(result ? no : null));
+//	}
 }
