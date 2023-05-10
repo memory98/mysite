@@ -56,7 +56,6 @@ export default function Guestbook() {
             if (json.result !== 'success') {
                 throw json.message;
             }
-
             setMessages([json.data, ...messages]);
         }
     }
@@ -85,8 +84,10 @@ export default function Guestbook() {
             if (json.result !== 'success') {
                 throw json.message;
             }
+            console.log(json.data)
 
             json.data.length > 0 && setMessages([...messagesInState, ...json.data]);
+            console.log(messages)
             isFetching = false;
         } catch (err) {
             console.error(err);

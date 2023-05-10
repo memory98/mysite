@@ -42,6 +42,7 @@ export default function Index() {
                 const formData = new FormData();
                 formData.append('comments', comment);
                 formData.append('file', file);
+                console.log(file);
                 console.log(formData)
                 // Post
                 const response = await fetch(`/api/gallery`, {
@@ -79,7 +80,6 @@ export default function Index() {
                 if (!response.ok) {
                     throw `${response.status} ${response.statusText}`;
                 }
-
                 // API success?
                 const json = await response.json();
                 if (json.result !== 'success') {
@@ -87,7 +87,7 @@ export default function Index() {
                 }
 
                 // re-rendering(update)
-                setImageList(imageList.filter((item) => item.no !== parseInt(json.data)));
+                setImageList(imageList.filter((item) => item.no !== parseInt(json.data.no)));
             } catch (err) {
                 console.error(err);
             }
